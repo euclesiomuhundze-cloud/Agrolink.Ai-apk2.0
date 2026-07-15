@@ -33,6 +33,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.NavType
+import com.agon.app.ui.screens.AuthScreen
 import com.agon.app.ui.screens.CreateProfileScreen
 import com.agon.app.ui.screens.CropDiagnosisScreen
 import com.agon.app.ui.screens.DiagnosisResultScreen
@@ -91,9 +92,10 @@ fun MainApp() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "home",
+            startDestination = if (viewModel.currentUser.value != null) "home" else "auth",
             modifier = Modifier.padding(innerPadding),
         ) {
+            composable("auth") { AuthScreen(navController, viewModel) }
             composable("home") { HomeScreen(navController, viewModel) }
             composable("agro") { AgroHubScreen(navController, viewModel) }
             composable("biscato") { BiscatoHubScreen(navController, viewModel) }

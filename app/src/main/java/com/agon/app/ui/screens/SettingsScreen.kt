@@ -18,8 +18,13 @@ import androidx.compose.material.icons.filled.CloudOff
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -110,6 +115,34 @@ fun SettingsScreen(navController: NavHostController, viewModel: AppViewModel) {
                                     label = { Text(lang.label) },
                                 )
                             }
+                        }
+                    }
+                }
+            }
+            item {
+                SettingsSection(title = "Conta") {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(
+                            viewModel.currentUser.value?.email ?: "Sessão não iniciada",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Button(
+                            onClick = {
+                                viewModel.signOut()
+                                navController.navigate("auth") { popUpTo(0) }
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer),
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Icon(
+                                Icons.Default.Logout,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onErrorContainer,
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text("Terminar sessão", color = MaterialTheme.colorScheme.onErrorContainer)
                         }
                     }
                 }

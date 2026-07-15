@@ -13,6 +13,8 @@ import com.agon.app.data.SampleData
 import com.agon.app.data.SampleLeaf
 import com.agon.app.data.WorkerProfile
 import com.agon.app.data.WorkerRepository
+import com.agon.app.data.AuthRepository
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -50,6 +52,48 @@ class AppViewModel : ViewModel() {
 
     private val jobRepository = JobRepository()
     private val workerRepository = WorkerRepository()
+
+    private val authRepository = AuthRepository()
+    val currentUser = mutableStateOf<FirebaseUser?>(authRepository.currentUser)
+    val authError = mutableStateOf<String?>(null)
+    val isAuthLoading = mutableStateOf(false)
+
+    fun signUp(email: String, password: String, onSuccess: () -> Unit) {
+        isAuthLoading.value = true
+        authError.value = null
+        viewModelScope.launch {
+            val result = authRepository.signUp(email, password)
+            isAuthLoading.value = false
+            result.onSuccess {
+                currentUser.value = it
+                userName.value = email.substringBefore("@")
+                onSuccess()
+            }.onFailure {
+                authError.value = it.message ?: "Não foi possível criar a conta."
+            }
+        }
+    }
+
+    fun signIn(email: String, password: String, onSuccess: () -> Unit) {
+        isAuthLoading.value = true
+        authError.value = null
+        viewModelScope.launch {
+            val result = authRepository.signIn(email, password)
+            isAuthLoading.value = false
+            result.onSuccess {
+                currentUser.value = it
+                userName.value = email.substringBefore("@")
+                onSuccess()
+            }.onFailure {
+                authError.value = it.message ?: "Não foi possível iniciar sessão."
+            }
+        }
+    }
+
+    fun signOut() {
+        authRepository.signOut()
+        currentUser.value = null
+    }
 
     val savedWorkerIds = mutableStateListOf<String>()
     val appliedJobIds = mutableStateListOf<String>()
