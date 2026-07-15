@@ -37,8 +37,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.agon.app.data.SkillCategory
+import com.agon.app.data.WorkerProfile
 import com.agon.app.ui.components.InitialsAvatar
 import com.agon.app.viewmodel.AppViewModel
+import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -164,6 +166,21 @@ fun CreateProfileScreen(navController: NavHostController, viewModel: AppViewMode
                     Button(
                         onClick = {
                             viewModel.userName.value = name.ifBlank { "Novo Profissional" }
+                            viewModel.createWorkerProfile(
+                                WorkerProfile(
+                                    id = UUID.randomUUID().toString(),
+                                    name = name,
+                                    skill = skill,
+                                    bio = bio,
+                                    location = location.ifBlank { "Não especificado" },
+                                    distanceKm = 0.0,
+                                    rating = 0.0,
+                                    reviewCount = 0,
+                                    completedJobs = 0,
+                                    priceHint = price.ifBlank { "A combinar" },
+                                    verified = false,
+                                ),
+                            )
                             submitted = true
                         },
                         modifier = Modifier

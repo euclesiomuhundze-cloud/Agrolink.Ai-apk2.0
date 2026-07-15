@@ -12,6 +12,7 @@ import com.agon.app.data.JobStatus
 import com.agon.app.data.SampleData
 import com.agon.app.data.SampleLeaf
 import com.agon.app.data.WorkerProfile
+import com.agon.app.data.WorkerRepository
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -48,12 +49,16 @@ class AppViewModel : ViewModel() {
     }
 
     private val jobRepository = JobRepository()
+    private val workerRepository = WorkerRepository()
 
     val savedWorkerIds = mutableStateListOf<String>()
     val appliedJobIds = mutableStateListOf<String>()
     val postedJobs = mutableStateListOf<JobPost>()
     val isLoadingJobs = mutableStateOf(true)
     val jobsError = mutableStateOf<String?>(null)
+    val workers = mutableStateListOf<WorkerProfile>()
+    val isLoadingWorkers = mutableStateOf(true)
+    val workersError = mutableStateOf<String?>(null)
     val chatThreads = mutableMapOf<String, androidx.compose.runtime.snapshots.SnapshotStateList<ChatMessage>>()
 
     init {
@@ -64,6 +69,15 @@ class AppViewModel : ViewModel() {
                     postedJobs.addAll(jobs)
                     isLoadingJobs.value = false
                     jobsError.value = null
+                }
+        }
+        viewModelScope.launch {
+            workerRepository.observeWorkers()
+                .collect { list ->
+                    workers.clear()
+                    workers.addAll(list)
+                    isLoadingWorkers.value = false
+                    workersError.value = null
                 }
         }
     }
@@ -118,6 +132,18 @@ class AppViewModel : ViewModel() {
         )
     }
 
-    fun workerById(id: String): WorkerProfile? = SampleData.workers.find { it.id == id }
+    fun createWorkerProfile(worker: WorkerProfile) {
+        workers.add(0, worker)
+        viewModelScope.launch {
+            try {
+                workerRepository.createProfile(worker)
+            } catch (e: Exception) {
+                workersError.value = "Não foi possível criar o perfil: ${e.message}"
+                workers.remove(worker)
+            }
+        }
+    }
+
+    fun workerById(id: String): WorkerProfile? = workers.find { it.id == id }
     fun jobById(id: String): JobPost? = postedJobs.find { it.id == id }
 }
