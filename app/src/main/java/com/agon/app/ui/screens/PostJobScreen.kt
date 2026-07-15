@@ -167,7 +167,7 @@ fun PostJobScreen(navController: NavHostController, viewModel: AppViewModel) {
                     OutlinedTextField(
                         value = budget,
                         onValueChange = { budget = it },
-                        label = { Text("Orçamento estimado (Kz)") },
+                        label = { Text("Orçamento estimado (MT)") },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
                     )
@@ -187,7 +187,7 @@ fun PostJobScreen(navController: NavHostController, viewModel: AppViewModel) {
                                     description = description.ifBlank { "Sem descrição adicional." },
                                     location = location.ifBlank { "Não especificado" },
                                     distanceKm = 0.5,
-                                    budgetHint = budget.ifBlank { "A combinar" } + " Kz",
+                                    budgetHint = budget.ifBlank { "A combinar" } + " MT",
                                     postedBy = viewModel.userName.value,
                                     postedAgo = "agora mesmo",
                                     urgent = urgent,

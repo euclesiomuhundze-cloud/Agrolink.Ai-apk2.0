@@ -158,7 +158,7 @@ fun CreateProfileScreen(navController: NavHostController, viewModel: AppViewMode
                     OutlinedTextField(
                         value = price,
                         onValueChange = { price = it },
-                        label = { Text("Preço médio (ex: a partir de 5.000 Kz)") },
+                        label = { Text("Preço médio (ex: a partir de 5.000 MT)") },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
                     )

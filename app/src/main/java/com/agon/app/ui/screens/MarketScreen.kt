@@ -96,7 +96,7 @@ private fun PriceRow(price: MarketPrice) {
                 Pill(text = price.category)
             }
             Column(horizontalAlignment = Alignment.End) {
-                Text("${price.price} Kz", fontWeight = FontWeight.ExtraBold, style = MaterialTheme.typography.titleSmall)
+                Text("${price.price} MT", fontWeight = FontWeight.ExtraBold, style = MaterialTheme.typography.titleSmall)
                 Text(
                     "por ${price.unit}",
                     style = MaterialTheme.typography.labelSmall,

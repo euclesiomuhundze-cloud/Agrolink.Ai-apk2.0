@@ -47,7 +47,7 @@ data class MarketPrice(
     val cropName: String,
     val category: String,
     val unit: String,
-    val price: Int, // in local currency units (Kz)
+    val price: Int, // in local currency units (MT)
     val trend: PriceTrend,
     val changePercent: Int,
 )

@@ -140,7 +140,7 @@ private fun ProduceCard(listing: ProduceListing, onContact: () -> Unit) {
             }
             Column(horizontalAlignment = Alignment.End) {
                 Text(
-                    "${listing.pricePerUnit} Kz",
+                    "${listing.pricePerUnit} MT",
                     fontWeight = FontWeight.ExtraBold,
                     style = MaterialTheme.typography.titleSmall,
                 )

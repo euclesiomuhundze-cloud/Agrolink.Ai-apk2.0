@@ -226,7 +226,7 @@ private fun MiniPriceCard(name: String, price: Int, trend: PriceTrend) {
         ) {
             Text(name, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
             Column {
-                Text("$price Kz", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                Text("$price MT", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                 Text(
                     when (trend) {
                         PriceTrend.SUBIU -> "▲ subida"

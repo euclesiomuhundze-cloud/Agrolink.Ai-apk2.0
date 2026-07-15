@@ -120,7 +120,7 @@ object SampleData {
         WorkerProfile(
             "w1", "Fernando Muatxi", SkillCategory.PEDREIRO,
             "15 anos de experiência em construção e reboco. Trabalho garantido e limpo.",
-            "Viana, Luanda", 1.2, 4.8, 63, 120, "a partir de 8.000 Kz/dia", true,
+            "Viana, Luanda", 1.2, 4.8, 63, 120, "a partir de 8.000 MT/dia", true,
             listOf(
                 Review("Carla M.", 5, "Excelente trabalho, muito pontual!", "há 3 dias"),
                 Review("Pedro S.", 5, "Recomendo, preço justo.", "há 1 semana"),
@@ -129,38 +129,38 @@ object SampleData {
         WorkerProfile(
             "w2", "Vitória Kiala", SkillCategory.COSTUREIRA,
             "Costura e conserto de roupa, uniformes escolares e capulanas sob medida.",
-            "Maianga, Luanda", 0.8, 4.9, 88, 200, "a partir de 1.500 Kz/peça", true,
+            "Maianga, Luanda", 0.8, 4.9, 88, 200, "a partir de 1.500 MT/peça", true,
             listOf(Review("João P.", 5, "Trabalho impecável e rápido.", "há 2 dias")),
         ),
         WorkerProfile(
             "w3", "Manuel Sacadura", SkillCategory.ELETRICISTA,
             "Instalação elétrica residencial, quadros e reparação de avarias.",
-            "Talatona, Luanda", 3.5, 4.6, 41, 90, "a partir de 6.000 Kz/visita", true,
+            "Talatona, Luanda", 3.5, 4.6, 41, 90, "a partir de 6.000 MT/visita", true,
         ),
         WorkerProfile(
             "w4", "Adriano Bumba", SkillCategory.CARPINTEIRO,
             "Móveis sob medida, portas e reparações em madeira maciça.",
-            "Cazenga, Luanda", 2.1, 4.7, 35, 70, "a partir de 10.000 Kz/projeto", false,
+            "Cazenga, Luanda", 2.1, 4.7, 35, 70, "a partir de 10.000 MT/projeto", false,
         ),
         WorkerProfile(
             "w5", "Ester Domingos", SkillCategory.EXPLICADOR,
             "Explicações de Matemática e Física para o ensino secundário.",
-            "Rangel, Luanda", 1.6, 5.0, 22, 55, "a partir de 2.000 Kz/hora", true,
+            "Rangel, Luanda", 1.6, 5.0, 22, 55, "a partir de 2.000 MT/hora", true,
         ),
         WorkerProfile(
             "w6", "Ricardo Wamba", SkillCategory.CANALIZADOR,
             "Canalizador certificado, resolve fugas, entupimentos e instalações.",
-            "Kilamba, Luanda", 4.0, 4.5, 29, 60, "a partir de 5.000 Kz/visita", false,
+            "Kilamba, Luanda", 4.0, 4.5, 29, 60, "a partir de 5.000 MT/visita", false,
         ),
         WorkerProfile(
             "w7", "Domingas Fuca", SkillCategory.LIMPEZA,
             "Limpeza doméstica e de escritórios, produtos próprios.",
-            "Viana, Luanda", 2.8, 4.8, 51, 130, "a partir de 4.000 Kz/dia", true,
+            "Viana, Luanda", 2.8, 4.8, 51, 130, "a partir de 4.000 MT/dia", true,
         ),
         WorkerProfile(
             "w8", "Kiluanje Afonso", SkillCategory.JARDINAGEM,
             "Manutenção de jardins, poda e paisagismo para casas e empresas.",
-            "Talatona, Luanda", 1.9, 4.4, 18, 40, "a partir de 3.500 Kz/dia", false,
+            "Talatona, Luanda", 1.9, 4.4, 18, 40, "a partir de 3.500 MT/dia", false,
         ),
     )
 
@@ -168,42 +168,42 @@ object SampleData {
         JobPost(
             "j1", "Preciso de pedreiro para reboco urgente", SkillCategory.PEDREIRO,
             "Reboco de uma parede exterior de 20m². Material já disponível no local.",
-            "Viana, Luanda", 1.0, "10.000 - 15.000 Kz", "Sofia Neto", "há 20 min", true, JobStatus.ABERTO,
+            "Viana, Luanda", 1.0, "10.000 - 15.000 MT", "Sofia Neto", "há 20 min", true, JobStatus.ABERTO,
         ),
         JobPost(
             "j2", "Aula de explicação de Matemática 10ª classe", SkillCategory.EXPLICADOR,
             "Aluno com dificuldades em funções e equações. 2x por semana.",
-            "Rangel, Luanda", 2.3, "2.500 Kz/hora", "Manuel Coxe", "há 1h", false, JobStatus.ABERTO,
+            "Rangel, Luanda", 2.3, "2.500 MT/hora", "Manuel Coxe", "há 1h", false, JobStatus.ABERTO,
         ),
         JobPost(
             "j3", "Conserto de vestido de festa", SkillCategory.COSTUREIRA,
             "Ajustar tamanho e trocar zíper de um vestido. Precisa até sexta-feira.",
-            "Maianga, Luanda", 0.5, "2.000 Kz", "Beatriz Lopes", "há 3h", true, JobStatus.ABERTO,
+            "Maianga, Luanda", 0.5, "2.000 MT", "Beatriz Lopes", "há 3h", true, JobStatus.ABERTO,
         ),
         JobPost(
             "j4", "Instalação elétrica de loja nova", SkillCategory.ELETRICISTA,
             "Loja de 60m², precisa de instalação completa de tomadas e iluminação.",
-            "Talatona, Luanda", 4.2, "40.000 Kz", "Empresa AngoShop", "há 5h", false, JobStatus.ABERTO,
+            "Talatona, Luanda", 4.2, "40.000 MT", "Empresa AngoShop", "há 5h", false, JobStatus.ABERTO,
         ),
         JobPost(
             "j5", "Móvel de cozinha sob medida", SkillCategory.CARPINTEIRO,
             "Preciso de armário de cozinha em madeira, medidas 2m x 2.4m.",
-            "Cazenga, Luanda", 3.0, "35.000 Kz", "Rui Almeida", "há 1 dia", false, JobStatus.EM_ANDAMENTO,
+            "Cazenga, Luanda", 3.0, "35.000 MT", "Rui Almeida", "há 1 dia", false, JobStatus.EM_ANDAMENTO,
         ),
         JobPost(
             "j6", "Desentupimento urgente de canalização", SkillCategory.CANALIZADOR,
             "Casa de banho entupida há dois dias, precisa resolver hoje.",
-            "Kilamba, Luanda", 1.7, "6.000 Kz", "Ana Paula", "há 40 min", true, JobStatus.ABERTO,
+            "Kilamba, Luanda", 1.7, "6.000 MT", "Ana Paula", "há 40 min", true, JobStatus.ABERTO,
         ),
         JobPost(
             "j7", "Limpeza pós-obra de apartamento", SkillCategory.LIMPEZA,
             "Apartamento T3 recém-pintado, precisa limpeza completa.",
-            "Viana, Luanda", 2.5, "8.000 Kz", "Cristina Bento", "há 2h", false, JobStatus.ABERTO,
+            "Viana, Luanda", 2.5, "8.000 MT", "Cristina Bento", "há 2h", false, JobStatus.ABERTO,
         ),
         JobPost(
             "j8", "Manutenção de jardim e poda de árvores", SkillCategory.JARDINAGEM,
             "Quintal de 300m² com relvado e árvores de fruto para podar.",
-            "Talatona, Luanda", 3.8, "12.000 Kz", "Empresa Verde Vida", "há 1 dia", false, JobStatus.CONCLUIDO,
+            "Talatona, Luanda", 3.8, "12.000 MT", "Empresa Verde Vida", "há 1 dia", false, JobStatus.CONCLUIDO,
         ),
     )
 
@@ -211,7 +211,7 @@ object SampleData {
         ChatMessage("m1", false, "Boa tarde! Vi o seu perfil, preciso de um pedreiro para amanhã.", "09:14"),
         ChatMessage("m2", true, "Boa tarde! Posso sim, qual é o serviço exatamente?", "09:16"),
         ChatMessage("m3", false, "Reboco de uma parede de 20m², material já tenho.", "09:17"),
-        ChatMessage("m4", true, "Perfeito, consigo fazer amanhã de manhã. Fica por 12.000 Kz.", "09:20"),
+        ChatMessage("m4", true, "Perfeito, consigo fazer amanhã de manhã. Fica por 12.000 MT.", "09:20"),
         ChatMessage("m5", false, "Combinado! Pode vir às 8h?", "09:22"),
         ChatMessage("m6", true, "Sim, estarei lá às 8h em ponto.", "09:23"),
     )
