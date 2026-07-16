@@ -206,6 +206,7 @@ private fun JobCard(job: JobPost, applied: Boolean, onClick: () -> Unit) {
                         JobStatus.ABERTO -> "Aberto" to MaterialTheme.colorScheme.secondary
                         JobStatus.EM_ANDAMENTO -> "Em andamento" to MaterialTheme.colorScheme.tertiary
                         JobStatus.CONCLUIDO -> "Concluído" to MaterialTheme.colorScheme.onSurfaceVariant
+                        JobStatus.CANCELADO -> "Cancelado" to MaterialTheme.colorScheme.error
                     }
                     Pill(text = statusText, containerColor = statusColor.copy(alpha = 0.15f), contentColor = statusColor)
                 }

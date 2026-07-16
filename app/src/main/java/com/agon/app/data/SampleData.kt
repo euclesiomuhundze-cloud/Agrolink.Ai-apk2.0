@@ -122,15 +122,15 @@ object SampleData {
             "15 anos de experiência em construção e reboco. Trabalho garantido e limpo.",
             "Viana, Luanda", 1.2, 4.8, 63, 120, "a partir de 8.000 MT/dia", true,
             listOf(
-                Review("Carla M.", 5, "Excelente trabalho, muito pontual!", "há 3 dias"),
-                Review("Pedro S.", 5, "Recomendo, preço justo.", "há 1 semana"),
+                Review("r1", "Carla M.", 5.0, "Excelente trabalho, muito pontual!", "há 3 dias"),
+                Review("r2", "Pedro S.", 5.0, "Recomendo, preço justo.", "há 1 semana"),
             ),
         ),
         WorkerProfile(
             "w2", "Vitória Kiala", SkillCategory.COSTUREIRA,
             "Costura e conserto de roupa, uniformes escolares e capulanas sob medida.",
             "Maianga, Luanda", 0.8, 4.9, 88, 200, "a partir de 1.500 MT/peça", true,
-            listOf(Review("João P.", 5, "Trabalho impecável e rápido.", "há 2 dias")),
+            listOf(Review("r3", "João P.", 5.0, "Trabalho impecável e rápido.", "há 2 dias")),
         ),
         WorkerProfile(
             "w3", "Manuel Sacadura", SkillCategory.ELETRICISTA,
