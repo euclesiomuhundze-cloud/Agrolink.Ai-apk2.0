@@ -4,9 +4,9 @@ plugins {
     id("com.android.application") version "8.2.2" apply false
 
     // Define a versão do Kotlin para Android
-    id("org.jetbrains.kotlin.android") version "1.9.22" apply false
-    id("org.jetbrains.kotlin.plugin.compose") version "1.9.22" apply false
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.22" apply false
+    id("org.jetbrains.kotlin.android") version "2.2.21" apply false
+    id("org.jetbrains.kotlin.plugin.compose") version "2.2.21" apply false
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.21" apply false
 
     // Se usares Firebase/Google Services:
     id("com.google.gms.google-services") version "4.4.1" apply false
