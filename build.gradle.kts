@@ -1,7 +1,7 @@
 // Ficheiro de configuração global da raiz compatível com Gradle 9+
 plugins {
     // Define a versão do Plugin do Android
-    id("com.android.application") version "8.2.2" apply false
+    id("com.android.application") version "8.10.1" apply false
 
     // Define a versão do Kotlin para Android
     id("org.jetbrains.kotlin.android") version "2.2.21" apply false
