@@ -1,3 +1,5 @@
+package com.agon.app.data.gemini
+
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.POST

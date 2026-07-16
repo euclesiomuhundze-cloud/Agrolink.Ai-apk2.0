@@ -14,6 +14,7 @@ import com.agon.app.data.SampleLeaf
 import com.agon.app.data.WorkerProfile
 import com.agon.app.data.WorkerRepository
 import com.agon.app.data.AuthRepository
+import com.agon.app.data.gemini.AgroLinkService
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -35,6 +36,28 @@ class AppViewModel : ViewModel() {
     val diagnosisHistory = mutableStateListOf<DiagnosisRecord>()
     val isDiagnosing = mutableStateOf(false)
     val lastDiagnosis = mutableStateOf<DiagnosisRecord?>(null)
+
+    // ---- Diagnóstico real via Gemini ----
+    val isAiDiagnosing = mutableStateOf(false)
+    val aiDiagnosisResult = mutableStateOf<String?>(null)
+    val aiDiagnosisError = mutableStateOf<String?>(null)
+    val aiDiagnosisImagePath = mutableStateOf<String?>(null)
+
+    fun runAiDiagnosis(imageFile: java.io.File, apiKey: String, onDone: () -> Unit) {
+        isAiDiagnosing.value = true
+        aiDiagnosisError.value = null
+        aiDiagnosisImagePath.value = imageFile.absolutePath
+        viewModelScope.launch {
+            val resultado = AgroLinkService.analisarPlanta(apiKey, imageFile)
+            isAiDiagnosing.value = false
+            if (resultado != null && !resultado.startsWith("Erro ao analisar imagem")) {
+                aiDiagnosisResult.value = resultado
+                onDone()
+            } else {
+                aiDiagnosisError.value = resultado ?: "Não foi possível analisar a imagem."
+            }
+        }
+    }
 
     fun runDiagnosis(leaf: SampleLeaf, onDone: (DiagnosisRecord) -> Unit) {
         val diseaseId = leaf.diseaseId ?: "healthy"
