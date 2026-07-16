@@ -51,7 +51,7 @@ data class PartResponse(
 // 3. INTERFACE DA API (RETROFIT)
 // ==========================================
 interface AgroLinkApi {
-    @POST("v1beta/models/gemini-1.5-flash:generateContent")
+    @POST("v1beta/models/gemini-flash-lite-latest:generateContent")
     suspend fun enviarDados(
         @Query("key") apiKey: String,
         @Body body: GeminiRequest
