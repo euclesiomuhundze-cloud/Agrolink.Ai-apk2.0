@@ -10,13 +10,15 @@ import com.agon.app.data.gemini.Part
 import com.agon.app.data.gemini.RetrofitClient
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 data class MarketPrice(
     @SerializedName("produto") val produto: String,
     @SerializedName("precoMt") val precoMt: Double,
     @SerializedName("unidade") val unidade: String,
-    @SerializedName("tendencia") val tendencia: String // "subida", "descida" ou "estavel"
+    @SerializedName("tendencia") val tendencia: String
 )
 
 class MarketPricesViewModel : ViewModel() {
@@ -26,51 +28,74 @@ class MarketPricesViewModel : ViewModel() {
     val error = mutableStateOf<String?>(null)
     val lastUpdated = mutableStateOf<String?>(null)
 
+    private val retryDelaysMs = listOf(5_000L, 15_000L, 40_000L)
+
     fun loadPrices(apiKey: String) {
         viewModelScope.launch {
             isLoading.value = true
             error.value = null
-            try {
-                val prompt = """
-                    Pesquise no site agricultura.gov.mz/sima/ o boletim "Quente-Quente" mais recente 
-                    com os preços de mercado agrícola de Moçambique. Preciso dos preços a nível 
-                    retalhista (Mt/Kg) dos seguintes produtos, se disponíveis: milho, feijão (manteiga 
-                    ou nhemba), mandioca, batata-doce, arroz, amendoim.
 
-                    Responda APENAS com um JSON válido, sem texto antes ou depois, sem markdown, 
-                    no seguinte formato exato:
-                    {
-                      "dataAtualizacao": "texto indicando a semana/data do boletim",
-                      "produtos": [
-                        {"produto": "Milho", "precoMt": 12500, "unidade": "Mt/Kg", "tendencia": "subida"},
-                        {"produto": "Feijão", "precoMt": 21000, "unidade": "Mt/Kg", "tendencia": "estavel"}
-                      ]
+            var tentativa = 0
+            while (true) {
+                try {
+                    val prompt = """
+                        Pesquise no site agricultura.gov.mz/sima/ o boletim "Quente-Quente" mais recente
+                        com os preços de mercado agrícola de Moçambique. Preciso dos preços a nível
+                        retalhista (Mt/Kg) dos seguintes produtos, se disponíveis: milho, feijão (manteiga
+                        ou nhemba), mandioca, batata-doce, arroz, amendoim.
+
+                        Responda APENAS com um JSON válido, sem texto antes ou depois, sem markdown,
+                        no seguinte formato exato:
+                        {
+                          "dataAtualizacao": "texto indicando a semana/data do boletim",
+                          "produtos": [
+                            {"produto": "Milho", "precoMt": 12500, "unidade": "Mt/Kg", "tendencia": "subida"},
+                            {"produto": "Feijão", "precoMt": 21000, "unidade": "Mt/Kg", "tendencia": "estavel"}
+                          ]
+                        }
+                        O campo tendencia deve ser exatamente "subida", "descida" ou "estavel".
+                        Se não encontrar dados para algum produto, omita-o da lista.
+                    """.trimIndent()
+
+                    val request = GeminiRequest(
+                        contents = listOf(
+                            Content(parts = listOf(Part(text = prompt)))
+                        ),
+                        tools = listOf(GeminiTool())
+                    )
+
+                    val response = RetrofitClient.api.enviarDados(apiKey, request)
+                    val texto = response.candidates?.firstOrNull()
+                        ?.content?.parts?.firstOrNull()?.text
+                        ?: throw Exception("Resposta vazia da IA")
+
+                    val jsonLimpo = extrairJson(texto)
+                    val resultado = Gson().fromJson(jsonLimpo, MarketPricesResult::class.java)
+
+                    prices.value = resultado.produtos
+                    lastUpdated.value = resultado.dataAtualizacao
+                    isLoading.value = false
+                    return@launch
+
+                } catch (e: Exception) {
+                    val is429 = (e is HttpException && e.code() == 429) ||
+                        (e.message?.contains("429") == true)
+
+                    if (is429 && tentativa < retryDelaysMs.size) {
+                        val espera = retryDelaysMs[tentativa]
+                        tentativa++
+                        delay(espera)
+                        continue
                     }
-                    O campo tendencia deve ser exatamente "subida", "descida" ou "estavel".
-                    Se não encontrar dados para algum produto, omita-o da lista.
-                """.trimIndent()
 
-                val request = GeminiRequest(
-                    contents = listOf(
-                        Content(parts = listOf(Part(text = prompt)))
-                    ),
-                    tools = listOf(GeminiTool())
-                )
-
-                val response = RetrofitClient.api.enviarDados(apiKey, request)
-                val texto = response.candidates?.firstOrNull()
-                    ?.content?.parts?.firstOrNull()?.text
-                    ?: throw Exception("Resposta vazia da IA")
-
-                val jsonLimpo = extrairJson(texto)
-                val resultado = Gson().fromJson(jsonLimpo, MarketPricesResult::class.java)
-
-                prices.value = resultado.produtos
-                lastUpdated.value = resultado.dataAtualizacao
-                isLoading.value = false
-            } catch (e: Exception) {
-                error.value = "Não foi possível carregar os preços de mercado: ${e.message}"
-                isLoading.value = false
+                    error.value = if (is429) {
+                        "O serviço está com muitas pesquisas neste momento. Aguarde alguns minutos e tente novamente."
+                    } else {
+                        "Não foi possível carregar os preços de mercado: ${e.message}"
+                    }
+                    isLoading.value = false
+                    return@launch
+                }
             }
         }
     }
