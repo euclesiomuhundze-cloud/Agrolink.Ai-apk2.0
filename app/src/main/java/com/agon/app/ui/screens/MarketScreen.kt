@@ -37,13 +37,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.viewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.agon.app.BuildConfig
-import com.agon.app.ui.components.Pill
 import com.agon.app.viewmodel.MarketPrice
 import com.agon.app.viewmodel.MarketPricesViewModel
-import com.agon.app.viewmodel.PriceTrend
 import kotlinx.coroutines.delay
 
 private const val AUTO_REFRESH_INTERVAL_MS = 60 * 60 * 1000L // 1 hora
