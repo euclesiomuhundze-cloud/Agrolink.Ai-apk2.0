@@ -11,7 +11,8 @@ import com.google.gson.annotations.SerializedName
 // 1. CLASSES DE REQUISIÇÃO (REQUEST)
 // ==========================================
 data class GeminiRequest(
-    @SerializedName("contents") val contents: List<Content>
+    @SerializedName("contents") val contents: List<Content>,
+    @SerializedName("tools") val tools: List<GeminiTool>? = null
 )
 
 data class Content(
@@ -73,3 +74,11 @@ object RetrofitClient {
     }
 }
 
+
+data class GeminiTool(
+    @SerializedName("google_search") val googleSearch: GoogleSearchTool = GoogleSearchTool()
+)
+
+data class GoogleSearchTool(
+    val placeholder: String? = null
+)
