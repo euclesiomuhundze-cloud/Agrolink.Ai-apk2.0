@@ -35,6 +35,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.NavType
 import com.agon.app.ui.screens.AiDiagnosisResultScreen
 import com.agon.app.ui.screens.AuthScreen
+import com.agon.app.ui.screens.WeatherScreen
 import com.agon.app.ui.screens.CreateProfileScreen
 import com.agon.app.ui.screens.CropDiagnosisScreen
 import com.agon.app.ui.screens.DiagnosisResultScreen
@@ -107,9 +108,9 @@ fun MainApp() {
             composable("agro/diagnosis") { CropDiagnosisScreen(navController, viewModel) }
             composable("agro/diagnosis_result") { DiagnosisResultScreen(navController, viewModel) }
             composable("agro/ai_diagnosis_result") { AiDiagnosisResultScreen(navController, viewModel) }
-            composable("agro/weather") { WeatherScreen(navController) }
             composable("agro/market") { MarketScreen(navController) }
             composable("agro/tips") { TipsScreen(navController) }
+        composable("agro/weather") { WeatherScreen(onBack = { navController.popBackStack() }) }
             composable("agro/marketplace") { MarketplaceScreen(navController) }
 
             // BiscatoHub sub-screens
