@@ -14,6 +14,8 @@ import com.agon.app.data.SampleLeaf
 import com.agon.app.data.WorkerProfile
 import com.agon.app.data.WorkerRepository
 import com.agon.app.data.AuthRepository
+import com.agon.app.data.ChatRepository
+import com.agon.app.data.conversationIdFor
 import com.agon.app.data.gemini.AgroLinkService
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
@@ -77,6 +79,7 @@ class AppViewModel : ViewModel() {
     private val workerRepository = WorkerRepository()
 
     private val authRepository = AuthRepository()
+    private val chatRepository = ChatRepository()
     val currentUser = mutableStateOf<FirebaseUser?>(authRepository.currentUser)
     val authError = mutableStateOf<String?>(null)
     val isAuthLoading = mutableStateOf(false)
@@ -173,30 +176,42 @@ class AppViewModel : ViewModel() {
         }
     }
 
+
+    private val observedConversations = mutableSetOf<String>()
+
     fun messagesFor(workerId: String): androidx.compose.runtime.snapshots.SnapshotStateList<ChatMessage> {
-        return chatThreads.getOrPut(workerId) {
-            mutableStateListOf(*SampleData.sampleChat.toTypedArray())
+        val list = chatThreads.getOrPut(workerId) {
+            mutableStateListOf()
         }
+        val myUid = currentUser.value?.uid
+        val conversationId = if (myUid != null) conversationIdFor(myUid, workerId) else null
+
+        if (conversationId != null && observedConversations.add(conversationId)) {
+            viewModelScope.launch {
+                chatRepository.observeMessages(conversationId).collect { firestoreMessages ->
+                    list.clear()
+                    list.addAll(
+                        firestoreMessages.map { fm ->
+                            ChatMessage(
+                                id = fm.id,
+                                senderIsMe = fm.senderId == myUid,
+                                text = fm.text,
+                                timeLabel = "agora",
+                            )
+                        }
+                    )
+                }
+            }
+        }
+        return list
     }
 
     fun sendMessage(workerId: String, text: String) {
-        val list = messagesFor(workerId)
-        list.add(
-            ChatMessage(
-                id = UUID.randomUUID().toString(),
-                senderIsMe = true,
-                text = text,
-                timeLabel = "agora",
-            ),
-        )
-        list.add(
-            ChatMessage(
-                id = UUID.randomUUID().toString(),
-                senderIsMe = false,
-                text = "Combinado, obrigado pela mensagem! Vou confirmar em breve.",
-                timeLabel = "agora",
-            ),
-        )
+        val myUid = currentUser.value?.uid ?: return
+        val conversationId = conversationIdFor(myUid, workerId)
+        viewModelScope.launch {
+            chatRepository.sendMessage(conversationId, myUid, text)
+        }
     }
 
     fun createWorkerProfile(worker: WorkerProfile) {
