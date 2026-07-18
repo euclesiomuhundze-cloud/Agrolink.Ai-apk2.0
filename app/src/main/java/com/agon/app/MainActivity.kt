@@ -47,6 +47,7 @@ import com.agon.app.ui.screens.ChatScreen
 import com.agon.app.ui.screens.JobDetailScreen
 import com.agon.app.ui.screens.JobsListScreen
 import com.agon.app.ui.screens.MarketScreen
+import com.agon.app.ui.screens.MapScreen
 import com.agon.app.ui.screens.MarketplaceScreen
 import com.agon.app.ui.screens.PostJobScreen
 import com.agon.app.ui.screens.SettingsScreen
@@ -112,6 +113,7 @@ fun MainApp() {
             composable("agro/tips") { TipsScreen(navController) }
         composable("agro/weather") { WeatherScreen(onBack = { navController.popBackStack() }) }
             composable("agro/marketplace") { MarketplaceScreen(navController) }
+    composable("agro/map") { MapScreen(navController) }
 
             // BiscatoHub sub-screens
             composable("biscato/jobs") { JobsListScreen(navController, viewModel) }

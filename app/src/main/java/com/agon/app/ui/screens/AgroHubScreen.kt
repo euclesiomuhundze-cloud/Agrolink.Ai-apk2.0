@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material.icons.outlined.Lightbulb
@@ -113,6 +114,13 @@ fun AgroHubScreen(navController: NavHostController, viewModel: AppViewModel) {
                         description = "Publica a tua produção e liga-te diretamente a compradores da região.",
                         color = Color(0xFF2E7D32),
                         onClick = { navController.navigate("agro/marketplace") },
+                        AgroToolCard(
+                            icon = Icons.Default.Map,
+                            title = "Minha localização",
+                            description = "Vê a tua localização no mapa em tempo real.",
+                            color = Color(0xFF1976D2),
+                            onClick = { navController.navigate("agro/map") },
+                        )
                     )
                 }
             }
