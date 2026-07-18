@@ -121,6 +121,7 @@ fun AgroHubScreen(navController: NavHostController, viewModel: AppViewModel) {
                             color = Color(0xFF1976D2),
                             onClick = { navController.navigate("agro/map") },
                         )
+                        )
                     )
                 }
             }
