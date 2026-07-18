@@ -1,5 +1,6 @@
 package com.agon.app.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,7 @@ import com.agon.app.data.gemini.Part
 import com.agon.app.data.gemini.RetrofitClient
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -29,8 +31,31 @@ class MarketPricesViewModel : ViewModel() {
     val lastUpdated = mutableStateOf<String?>(null)
 
     private val retryDelaysMs = listOf(5_000L, 15_000L, 40_000L)
+    private val cacheValidadeMs = 24 * 60 * 60 * 1000L
 
-    fun loadPrices(apiKey: String) {
+    private val prefsNome = "market_prices_cache"
+    private val chavePrecos = "precos_json"
+    private val chaveData = "data_atualizacao"
+    private val chaveTimestamp = "timestamp_busca"
+
+    fun loadPrices(context: Context, apiKey: String, forceRefresh: Boolean = false) {
+        val prefs = context.getSharedPreferences(prefsNome, Context.MODE_PRIVATE)
+
+        if (!forceRefresh) {
+            val timestamp = prefs.getLong(chaveTimestamp, 0L)
+            val cacheValido = (System.currentTimeMillis() - timestamp) < cacheValidadeMs
+            if (cacheValido) {
+                val precosJson = prefs.getString(chavePrecos, null)
+                if (precosJson != null) {
+                    val tipo = object : TypeToken<List<MarketPrice>>() {}.type
+                    val precosCache: List<MarketPrice> = Gson().fromJson(precosJson, tipo)
+                    prices.value = precosCache
+                    lastUpdated.value = prefs.getString(chaveData, null)
+                    return
+                }
+            }
+        }
+
         viewModelScope.launch {
             isLoading.value = true
             error.value = null
@@ -75,6 +100,13 @@ class MarketPricesViewModel : ViewModel() {
                     prices.value = resultado.produtos
                     lastUpdated.value = resultado.dataAtualizacao
                     isLoading.value = false
+
+                    prefs.edit()
+                        .putString(chavePrecos, Gson().toJson(resultado.produtos))
+                        .putString(chaveData, resultado.dataAtualizacao)
+                        .putLong(chaveTimestamp, System.currentTimeMillis())
+                        .apply()
+
                     return@launch
 
                 } catch (e: Exception) {

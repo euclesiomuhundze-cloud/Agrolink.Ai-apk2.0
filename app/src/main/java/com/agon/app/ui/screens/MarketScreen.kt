@@ -1,6 +1,5 @@
 package com.agon.app.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -42,9 +42,6 @@ import androidx.navigation.NavHostController
 import com.agon.app.BuildConfig
 import com.agon.app.viewmodel.MarketPrice
 import com.agon.app.viewmodel.MarketPricesViewModel
-import kotlinx.coroutines.delay
-
-private const val AUTO_REFRESH_INTERVAL_MS = 60 * 60 * 1000L // 1 hora
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,17 +49,14 @@ fun MarketScreen(
     navController: NavHostController,
     viewModel: MarketPricesViewModel = viewModel()
 ) {
+    val context = LocalContext.current
     val isLoading by viewModel.isLoading
     val prices by viewModel.prices
     val error by viewModel.error
     val lastUpdated by viewModel.lastUpdated
 
     LaunchedEffect(Unit) {
-        viewModel.loadPrices(BuildConfig.GEMINI_API_KEY)
-        while (true) {
-            delay(AUTO_REFRESH_INTERVAL_MS)
-            viewModel.loadPrices(BuildConfig.GEMINI_API_KEY)
-        }
+        viewModel.loadPrices(context, BuildConfig.GEMINI_API_KEY)
     }
 
     Scaffold(
@@ -76,7 +70,7 @@ fun MarketScreen(
                 },
                 actions = {
                     IconButton(
-                        onClick = { viewModel.loadPrices(BuildConfig.GEMINI_API_KEY) },
+                        onClick = { viewModel.loadPrices(context, BuildConfig.GEMINI_API_KEY, forceRefresh = true) },
                         enabled = !isLoading
                     ) {
                         Icon(Icons.Default.Refresh, contentDescription = "Atualizar preços")
@@ -114,7 +108,7 @@ fun MarketScreen(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(error ?: "Erro desconhecido")
                             Spacer(modifier = Modifier.width(12.dp))
-                            Button(onClick = { viewModel.loadPrices(BuildConfig.GEMINI_API_KEY) }) {
+                            Button(onClick = { viewModel.loadPrices(context, BuildConfig.GEMINI_API_KEY, forceRefresh = true) }) {
                                 Text("Tentar novamente")
                             }
                         }
