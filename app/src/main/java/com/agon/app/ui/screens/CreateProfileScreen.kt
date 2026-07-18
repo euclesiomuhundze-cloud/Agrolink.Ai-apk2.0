@@ -168,7 +168,7 @@ fun CreateProfileScreen(navController: NavHostController, viewModel: AppViewMode
                             viewModel.userName.value = name.ifBlank { "Novo Profissional" }
                             viewModel.createWorkerProfile(
                                 WorkerProfile(
-                                    id = UUID.randomUUID().toString(),
+                                    id = viewModel.currentUser.value?.uid ?: UUID.randomUUID().toString(),
                                     name = name,
                                     skill = skill,
                                     bio = bio,

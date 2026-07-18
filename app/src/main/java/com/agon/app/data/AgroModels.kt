@@ -71,4 +71,5 @@ data class ProduceListing(
     val location: String,
     val postedAgo: String,
     val verified: Boolean,
+    val sellerId: String = "",
 )
