@@ -114,15 +114,14 @@ fun AgroHubScreen(navController: NavHostController, viewModel: AppViewModel) {
                         description = "Publica a tua produção e liga-te diretamente a compradores da região.",
                         color = Color(0xFF2E7D32),
                         onClick = { navController.navigate("agro/marketplace") },
-                                )
-                        AgroToolCard(
-                            icon = Icons.Default.Map,
-                            title = "Minha localização",
-                            description = "Vê a tua localização no mapa em tempo real.",
-                            color = Color(0xFF1976D2),
-                            onClick = { navController.navigate("agro/map") },
-                        )
-                        )
+                    )
+                    AgroToolCard(
+                        icon = Icons.Default.Map,
+                        title = "Minha localização",
+                        description = "Vê a tua localização no mapa em tempo real.",
+                        color = Color(0xFF1976D2),
+                        onClick = { navController.navigate("agro/map") },
+                    )
                 }
             }
             item {
