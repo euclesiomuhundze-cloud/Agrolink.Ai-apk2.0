@@ -175,7 +175,7 @@ fun BottomNav(navController: NavHostController, currentRoute: String?) {
             },
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Forum, contentDescription = "Conversas") },
+            icon = { Icon(Icons.Default.Email, contentDescription = "Conversas") },
             label = { Text("Conversas") },
             selected = currentRoute == "conversations",
             onClick = {
