@@ -210,9 +210,43 @@ class AppViewModel : ViewModel() {
         val myUid = currentUser.value?.uid ?: return
         val conversationId = conversationIdFor(myUid, workerId)
         viewModelScope.launch {
-            chatRepository.sendMessage(conversationId, myUid, text)
+            chatRepository.sendMessage(conversationId, myUid, workerId, text)
         }
     }
+
+    data class ConversationDisplay(
+        val otherUid: String,
+        val displayName: String,
+        val lastMessage: String,
+    )
+
+    val conversations = mutableStateListOf<ConversationDisplay>()
+    private var conversationsObserved = false
+
+    fun observeConversations() {
+        val myUid = currentUser.value?.uid ?: return
+        if (conversationsObserved) return
+        conversationsObserved = true
+        viewModelScope.launch {
+            chatRepository.observeConversationsFor(myUid).collect { list ->
+                conversations.clear()
+                conversations.addAll(
+                    list.map { conversa ->
+                        val otherUid = conversa.participants.firstOrNull { it != myUid } ?: ""
+                        val worker = workers.find { it.id == otherUid }
+                        val listing = SampleData.produceListings.find { it.sellerId == otherUid }
+                        val name = worker?.name ?: listing?.farmerName ?: "Utilizador"
+                        ConversationDisplay(
+                            otherUid = otherUid,
+                            displayName = name,
+                            lastMessage = conversa.lastMessage,
+                        )
+                    }
+                )
+            }
+        }
+    }
+
 
     fun createWorkerProfile(worker: WorkerProfile) {
         workers.add(0, worker)

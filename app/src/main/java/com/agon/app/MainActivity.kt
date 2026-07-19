@@ -41,6 +41,7 @@ import com.agon.app.ui.screens.CropDiagnosisScreen
 import com.agon.app.ui.screens.DiagnosisResultScreen
 import com.agon.app.ui.screens.HomeScreen
 import com.agon.app.ui.screens.ImpactScreen
+import com.agon.app.ui.screens.ConversationsScreen
 import com.agon.app.ui.screens.AgroHubScreen
 import com.agon.app.ui.screens.BiscatoHubScreen
 import com.agon.app.ui.screens.ChatScreen
@@ -103,6 +104,7 @@ fun MainApp() {
             composable("agro") { AgroHubScreen(navController, viewModel) }
             composable("biscato") { BiscatoHubScreen(navController, viewModel) }
             composable("impact") { ImpactScreen(navController, viewModel) }
+            composable("conversations") { ConversationsScreen(navController, viewModel) }
             composable("settings") { SettingsScreen(navController, viewModel) }
 
             // AgroIA sub-screens
@@ -173,11 +175,11 @@ fun BottomNav(navController: NavHostController, currentRoute: String?) {
             },
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Insights, contentDescription = "Impacto") },
-            label = { Text("Impacto") },
-            selected = currentRoute == "impact",
+            icon = { Icon(Icons.Default.Chat, contentDescription = "Conversas") },
+            label = { Text("Conversas") },
+            selected = currentRoute == "conversations",
             onClick = {
-                navController.navigate("impact") { popUpTo("home") }
+                navController.navigate("conversations") { popUpTo("home") }
             },
         )
         NavigationBarItem(
